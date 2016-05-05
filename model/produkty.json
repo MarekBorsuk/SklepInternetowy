@@ -1,0 +1,13 @@
+[
+	{
+		"nazwa" : "Intel i5-6600K 3.50GHz 6MB BOX", 
+		"opis" : "Tworzysz własny system przeznaczony do gie...",
+		"cena" : 5400
+	},
+
+	{
+		"nazwa" : "Intel i7-6700K 4.00GHz 8MB BOX",
+		"opis" : "Tworzysz własny system.... ",
+		"cena" : 4999
+	}
+]	
