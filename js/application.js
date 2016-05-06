@@ -7,18 +7,34 @@
 */	
 	
 
-var app = angular.module( 'app' , [ 'ngRoute' , 'controllers' ] );
+var app = angular.module( 'app' , [ 'ngRoute' , 'myCtrls' ] );
 
 app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $httpProvider ) {
 
+	//ścieszki dostępu
 	$routeProvider.when( '/products' , {
 		controller : 'products',
-		templateUrl : 'partials/products.html'
+		templateUrl : 'view/products.html'
 	});
 
-	$routeProvider.when( '/product/:id' , {
-		controller: 'product',
-		templateUrl : 'partials/product.html'
+	$routeProvider.when( '/product/edit/:id' , {
+		controller: 'productEdit',
+		templateUrl : 'view/product-edit.html'
+	});
+
+	$routeProvider.when( '/product/create/' , {
+		controller: 'productCreate',
+		templateUrl : 'view/product-create.html'
+	});
+
+	$routeProvider.when( '/users' , {
+		controller: 'users',
+		templateUrl : 'view/users.html'
+	});
+
+	$routeProvider.when( '/login' , {
+		controller: 'login',
+		templateUrl : 'view/login.html'
 	});
 
 	$routeProvider.otherwise({

@@ -1,0 +1,19 @@
+<div class="container">
+	<div ng-controller="products"> 
+		<a href="#/product/create" class="btn btn-success pull-right">Nowy produkt</a>
+	    	<br>
+	    	<br>
+	    	<br>
+	    <div class="alert alert-info" ng-repeat="product in products | filter : search">
+
+	        <span class="text-capitalize">{{product.nazwa}}</span>
+	        <br> 
+	        {{product.cena | number:2}} zł
+	        <br>
+	        <br>
+	        <a href="#/product/edit/{{$index}}" class="btn btn-success">Edytuj</a>
+	        <button ng-click="delete(product, $index)" class="btn btn-danger pull-right ">Usuń</button>
+
+	    </div>
+	</div>
+</div>
