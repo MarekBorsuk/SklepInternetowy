@@ -32,6 +32,21 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		templateUrl : 'view/users.html'
 	});
 
+	$routeProvider.when( '/user/edit/:id' , {
+		controller: 'userEdit',
+		templateUrl : 'view/user-edit.html'
+	});
+
+	// $routeProvider.when( '/user/edit/:id' , {
+	// 	controller: 'userEdit',
+	// 	templateUrl : 'view/user-edit.html'
+	// });
+
+	$routeProvider.when( '/user/create/' , {
+		controller: 'userCreate',
+		templateUrl : 'view/user-create.html'
+	});
+
 	$routeProvider.when( '/login' , {
 		controller: 'login',
 		templateUrl : 'view/login.html'

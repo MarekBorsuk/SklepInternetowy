@@ -1,9 +1,14 @@
 <div class="container">
 	<div ng-controller="products"> 
-		<a href="#/product/create" class="btn btn-success pull-right">Nowy produkt</a>
-	    	<br>
-	    	<br>
-	    	<br>
+		<div class="row">
+			<div class="col-sm-6 form-group">
+	            <input type="text" class="form-control" placeholder="Szukaj" ng-model="search">
+	        </div>
+	        <div class="col-sm-6 text-right">
+	        	<a href="#/product/create" class="btn btn-success pull-right">Nowy produkt</a>
+	        </div>
+        </div>
+		
 	    <div class="alert alert-info" ng-repeat="product in products | filter : search">
 
 	        <span class="text-capitalize">{{product.nazwa}}</span>
