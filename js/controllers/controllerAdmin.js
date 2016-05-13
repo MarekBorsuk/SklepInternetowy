@@ -1,19 +1,8 @@
 'use strict';
 
-var myCtrls = angular.module( 'myCtrls' , [ 'ngRoute' ] );
-	
+var controllerAdmin = angular.module( 'controllerAdmin' , [ 'ngRoute' ] );
 
-myCtrls.controller( 'navigation' , [ '$scope' , '$location' , function( $scope , $location ){
-	
-	//pozwala zwrócić aktulną ścieszkę
-	console.log($location.path());
-	$scope.isActive = function ( path) {			
-		return $location.path() === path;
-	};
-
-}]);
-
-myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
+controllerAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
 	
 	$http.get( 'model/products.json' ).
 	success( function( data ){
@@ -34,7 +23,7 @@ myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http
 }]);
 
 
-myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllerAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
 	$http.post( 'model/products.json', function(){
 		//Łączenie z api	
@@ -53,7 +42,7 @@ myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , func
 
 }]);
 
-myCtrls.controller( 'productCreate' , [ '$scope' , '$http', function( $scope , $http){
+controllerAdmin.controller( 'productCreate' , [ '$scope' , '$http', function( $scope , $http){
 
 	$scope.createProduct = function () {
 		//Przesłać daone przez api
@@ -62,7 +51,7 @@ myCtrls.controller( 'productCreate' , [ '$scope' , '$http', function( $scope , $
 
 }]);
 
-myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
+controllerAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 	
 	$http.get( 'model/users.json' ).
 	success( function( data ){
@@ -79,7 +68,7 @@ myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 }]);
 
 
-myCtrls.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllerAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
 	$http.post( 'model/users.json' ).
 	success( function( data ){
@@ -99,11 +88,36 @@ myCtrls.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , functio
 
 }]);
 
-myCtrls.controller( 'userCreate' , [ '$scope' , '$http', function( $scope , $http){
+controllerAdmin.controller( 'userCreate' , [ '$scope' , '$http', function( $scope , $http){
 
 	$scope.createUser = function () {
 		//Przesłać daone przez api
 		console.log($scope.user);
+	};
+
+}]);
+
+controllerAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
+	
+	$http.get( 'model/orders.json' ).
+	success( function( data ){
+		$scope.orders = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+	$scope.delete = function (order, $index) {		
+		$scope.orders.splice($index, 1);
+		
+	};
+
+	$scope.changeStatus = function (order) {	
+		if(order.status == 0) {
+			order.status = 1;
+		} else {
+			order.status = 0;
+		}
+		//console.log(order.status);
 	};
 
 }]);

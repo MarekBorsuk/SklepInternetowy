@@ -1,27 +1,27 @@
 [
 	{
-		"nazwa" : "Intel i5-6600K 3.50GHz 6MB BOX", 
-		"opis" : "Tworzysz własny system przeznaczony do gie...",
-		"cena" : 5400
+		"name" : "Intel i5-6600K 3.50GHz 6MB BOX", 
+		"desc" : "Tworzysz własny system przeznaczony do gie...",
+		"price" : 5400
 	},
 	{
-		"nazwa" : "Intel i5-6600K 3.50GHz 6MB BOX", 
-		"opis" : "Tworzysz własny system przeznaczony do gie...",
-		"cena" : 5400
+		"name" : "Intel i5-5600K 3.50GHz 6MB BOX", 
+		"desc" : "Tworzysz własny system przeznaczony do gie...",
+		"price" : 3400
 	},
 	{
-		"nazwa" : "Intel i3-6600K 3.50GHz 6MB BOX", 
-		"opis" : "Tworzysz własny system przeznaczony do gie...",
-		"cena" : 5400
+		"name" : "Intel i3-6600K 3.50GHz 6MB BOX", 
+		"desc" : "Tworzysz własny system przeznaczony do gie...",
+		"price" : 2400
 	},
 	{
-		"nazwa" : "Intel i5-6600K 3.50GHz 6MB BOX", 
-		"opis" : "Tworzysz własny system przeznaczony do gie...",
-		"cena" : 5400
+		"name" : "Intel i5-4600K 3.50GHz 6MB BOX", 
+		"desc" : "Tworzysz własny system przeznaczony do gie...",
+		"price" : 2700
 	},
 	{
-		"nazwa" : "Intel i7-6700K 4.00GHz 8MB BOX",
-		"opis" : "Tworzysz własny system.... ",
-		"cena" : 4999
+		"name" : "Intel i7-6700K 4.00GHz 8MB BOX",
+		"desc" : "Tworzysz własny system.... ",
+		"price" : 4999
 	}
 ]	

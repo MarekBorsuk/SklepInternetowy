@@ -1,8 +1,8 @@
-<form ng-submit="createProduct()">
+<form ng-submit="saveChanges( user )">
 
 	<div class="container">
 	  <div class="row">
-	    <div class="col-sm-12">
+	    <div class="col-sm-5 center-block">
 
 	    	<div class="form-group">
 	    		<label>Imię</label>
@@ -32,14 +32,11 @@
 	    		</select>	
 	    	</div>
 
-		 </div>		 
-	  </div>
-	  <div class="row">
-			<div class="col-sm-12">
-				<button type="submit" class="btn btn-danger">Zapisz zmiany</button>
+	    	<button type="submit" class="btn btn-danger">Zapisz zmiany</button>
 				<a href="#/users" class="btn btn-default">Wróć</a>
 				<p>&nbsp;</p>
-			</div>
-		</div>	
+
+		 </div>		 
+	  </div>	 
 	</div>
 </form>

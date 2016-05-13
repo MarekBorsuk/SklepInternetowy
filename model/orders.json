@@ -1,0 +1,48 @@
+[
+	{
+		"userId": 1,
+		"name": "Ulla",
+		"email": "enim.consequat@luctusetultrices.net",
+		"role": "user",
+		"items":
+		[
+			{
+				"name" : "Intel i5-6600K 3.50GHz 6MB BOX", 
+				"desc" : "Tworzysz własny system przeznaczony do gie...",
+				"price" : 5400,
+				"qty": 1
+			},
+			{
+				"name" : "Intel i5-5600K 3.50GHz 6MB BOX", 
+				"desc" : "Tworzysz własny system przeznaczony do gie...",
+				"price" : 3400,
+				"qty": 1
+			}
+		],
+		"total": 8800,
+		"status": 0
+	},
+	{
+		"userId": 1,
+		"name": "Ulla",
+		"email": "enim.consequat@luctusetultrices.net",
+		"role": "user",
+		"items":
+		[
+			{
+				"name" : "Intel i5-4600K 3.50GHz 6MB BOX", 
+				"desc" : "Tworzysz własny system przeznaczony do gie...",
+				"price" : 2700,
+				"qty": 2
+			},
+			{
+				"name" : "Intel i7-6700K 4.00GHz 8MB BOX",
+				"desc" : "Tworzysz własny system.... ",
+				"price" : 4999,
+				"qty": 3
+			}
+		],
+		"total": 20397,
+		"status": 0
+	}
+]
