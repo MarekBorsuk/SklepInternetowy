@@ -3,7 +3,7 @@
 var controllerNavigation = angular.module( 'controllerNavigation' , [ 'ngRoute' ] );
 	
 
-controllerNavigation.controller( 'navigation' , [ '$scope' , '$location' , function( $scope , $location ){
+controllerNavigation.controller( 'navigation' , [ '$scope' , '$location' ,'cartServices', function( $scope , $location, cartServices ){
 	
 	$scope.navigation = function() {
 		//testowanie wyrażenia dla admina
@@ -18,6 +18,14 @@ controllerNavigation.controller( 'navigation' , [ '$scope' , '$location' , funct
 	$scope.isActive = function ( path) {			
 		return $location.path() === path;
 	};
+
+	// Storage
+	//store.set('test', 'działa!');
+
+	//Wyświetlanie koszyka jeśli coś w nim jest, watch obserwuje scope dynamicznie
+	$scope.$watch(function(){
+		$scope.cart = cartServices.show().length;
+	});
 
 }]);
 

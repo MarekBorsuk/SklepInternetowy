@@ -2,28 +2,23 @@
 
 var controllerUser = angular.module( 'controllerUser' , [ 'ngRoute' ] );
 
-controllerUser.controller( 'userShowProducts' , [ '$scope' , '$http' , function( $scope , $http ){
+controllerUser.controller( 'userShowProducts' , [ '$scope' , '$http', 'cartServices', function( $scope , $http, cartServices ){
 	
 	$http.get( 'model/products.json' ).
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
-	});
+	});	
 
-	$scope.delete = function (product, $index) {
-		//splice usuwanie/dodawanie obiektów, używamy go na zbiorach danych,
-		//1 parametr index	
-		//2/3 parametr ilość następnych do usunięcia/dodania obiektów	
-		$scope.products.splice($index, 1);	
-
-		//Przesyłanie danych przez api	
+	$scope.addToCart = function(product){
+		cartServices.add(product);
 	};
 
 }]);
 
 
-controllerUser.controller( 'userShowProduct' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllerUser.controller( 'userShowProduct' , [ '$scope' , '$http' , '$routeParams','cartServices', function( $scope , $http , $routeParams, cartServices ){
 
 	$http.post( 'model/products.json', function(){
 		//Łączenie z api	
@@ -32,14 +27,11 @@ controllerUser.controller( 'userShowProduct' , [ '$scope' , '$http' , '$routePar
 		$scope.product = products[$routeParams.id];
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
-	});
+	});	
 
-	// -------------funkcja dla admina----------
-	// $scope.saveChanges = function ( product) {
-	// 	//Przesyłanie danych przez api
-	// 	console.log( product);
-	// 	console.log($routeParams.id);
-	// };
+	$scope.addToCart = function(product){
+		cartServices.add(product);
+	};
 
 }]);
 
@@ -89,3 +81,59 @@ controllerUser.controller( 'orders' , [ '$scope' , '$http' , function( $scope , 
 	};
 
 }]);
+
+controllerUser.controller( 'cartCtrl' , [ '$scope', '$http', 'cartServices', function( $scope , $http, cartServices ){
+	
+	$scope.cart = cartServices.show();
+
+	$scope.clearCart = function(){
+		cartServices.clear();
+	};
+	
+	$scope.total = function (){
+		var total = 0;
+		angular.forEach($scope.cart , function(item){
+			total += item.qty * item.price;
+		});
+		return total;
+	};
+
+	$scope.removeItem = function($index ){
+		$scope.cart.splice($index, 1);
+		cartServices.update($scope.cart);
+	};
+
+	$scope.setOrder = function($event){		
+		
+		//Spr czy użytkownik jest zalogowany
+		var loggedIn = true;	
+		
+		if(!loggedIn){
+			$scope.alert = {type: 'warning', msg: 'Zaloguj się aby złożyć zamówienie!'};
+			//zapobiegnięcie przesłania zamówienia
+			$event.preventDefault();
+			return false;
+		}	
+
+		//Zapisywanie do bazy zamówienia
+		console.log($scope.total());
+		console.log($scope.cart);
+
+		$scope.alert = {type: 'success', msg: 'Zamówienie złożeone, trwa przekierowanie do płatności!'};
+		
+		cartServices.clear();
+		
+		
+		//blokowanie paypala
+		$event.preventDefault();
+		$('#paypalForm').submit();
+	};
+
+	//rozwiązanie problemu dla ilość w koszyku po odświażaniu przeglądarki - zapisuje zmiany po przez
+	//nadpisanie koszyka. $watch wykrywa zmiany w $scope
+	$scope.$watch(function (){
+		cartServices.update($scope.cart);
+	});
+
+}]);
+

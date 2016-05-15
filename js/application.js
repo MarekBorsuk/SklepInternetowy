@@ -7,7 +7,7 @@
 */	
 	
 
-var app = angular.module( 'app' , [ 'ngRoute' ,'controllerNavigation', 'controllerAdmin', 'controllerUser' ] );
+var app = angular.module( 'app' , [ 'ngRoute', 'angular-storage', 'controllerNavigation', 'controllerAdmin', 'controllerUser', 'services' ] );
 
 app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $httpProvider ) {
 
@@ -60,6 +60,12 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		controller: 'userShowProduct',
 		templateUrl : 'view/user/product.html'
 	});
+
+	$routeProvider.when( '/cart' , {
+		controller: 'cartCtrl',
+		templateUrl : 'view/user/cart.html'
+	});
+
 
 	//------------login---------------
 	$routeProvider.when( '/login' , {

@@ -1,0 +1,62 @@
+<form  id="paypalForm" name="myForm" ng-submit="setOrder($event)" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">				
+				<div ng-if="alert" class="alert alert-{{alert.type}} text-center"><strong>{{alert.msg}}</strong></div>	
+				<div ng-if="!cart.length && alert.type != 'success'" class="alert alert-info text-center">NIc nie dodałeś do koszyka!</div>
+				<div ng-if="cart.length">
+						<h1>Koszyk</h1>
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>Nazwa</td>
+									<td>Ilość</td>
+									<td>Cena</td>
+									<td>Razem</td>
+									<td></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="item in cart">
+									<td>{{item.name}}</td>
+									<td> 
+										<div class="form-group" ng-class="{'has-error' : myForm.input{{$index}}.$error.required ||  myForm.input{{$index}}.$error.number ||  myForm.input{{$index}}.$error.max ||  myForm.input{{$index}}.$error.min}">
+											<input name="input{{$index}}" class="form-control" type="number" ng-model="item.qty" min="1" max="10" required>
+										</div>
+										<span class="text-denger" ng-show="myForm.input{{$index}}.$error.required">Podaj ilość!</span>
+										<span class="text-denger" ng-show="myForm.input{{$index}}.$error.number">Tylko cyfry!</span>
+										<span class="text-denger" ng-show="myForm.input{{$index}}.$error.max">Brakuje towaru.</span>
+										<span class="text-denger" ng-show="myForm.input{{$index}}.$error.min">Za mało!</span>
+									</td>
+									<td>{{item.price | number:2}} zł</td>
+									<td><strong>{{item.qty * item.price | number:2}} zł</strong></td>
+									<td><button ng-click="removeItem($index)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
+								</tr>
+								<tr>
+									<td colspan="3"></td>						
+									<td><strong>{{total() | number:2}} zł</strong></td>	
+									<td></td>			
+								</tr>
+							</tbody>
+						</table>
+						<!-- Identyfikacja na kogo ma być zrobiony przelew -->
+						<input type="hidden" name="cmd" value="_cart">
+						<input type="hidden" name="upload" value="1">
+						<input type="hidden" name="business" value="markus19910222@gmail.com">
+						<input type="hidden" name="charset" value="utf-8">
+						<input type="hidden" name="currency_code" value="PLN">
+						
+						<div ng-repeat="item in cart">
+							<input type="hidden" name="item_name_{{$index+1}}" value="{{item.name}}">
+							<input type="hidden" name="quantity_{{$index+1}}" value="{{item.qty}}">
+							<input type="hidden" name="amount_{{$index+1}}" value="{{item.price}}">
+						</div>							
+
+						<button ng-click="clearCart()" class="btn btn-danger">Wyczyść koszyk</button>
+						<button class="btn btn-success pull-right" type="submit" value="PayPal">Przejdź do płatności</button>   
+
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

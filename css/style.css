@@ -1,0 +1,9 @@
+/*opływanie dla edycji użytkownika (wyśrodkowanie edycji)*/
+.center-block {
+    float: none;
+}
+body {
+	padding-top: 70px;
+	overflow-y: scroll;
+}
+

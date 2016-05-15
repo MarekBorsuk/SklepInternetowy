@@ -1,7 +1,7 @@
 <div class="container">
 	<div ng-controller="products"> 
 		<div class="row">
-			<div class="col-xs-6 form-group">
+			<div class="col-xs-3 form-group">
 	            <input type="text" class="form-control" placeholder="Szukaj" ng-model="search">
 	        </div>
 	        <!-- Dodowanie produktu jest zablokowane dla użytkownika -->
@@ -13,9 +13,11 @@
 	    <div class="panel panel-default" ng-repeat="product in products | filter : search">
 	    	<div class="panel-body">
 	    		<h3><span class="label label-warning pull-right">{{product.price | number:2}} zł</span></h3> 
-		        <h4><a href="#/product/{{$index}}" class="text-capitalize">{{product.name}}</a></h4>  
-		       
-		        <a href="#/product/{{$index}}" class="btn btn-success">Więcej</a>
+		        <h4><a href="#/product/{{$index}}" class="text-capitalize">{{product.name}}</a></h4>
+		       	<hr>
+		        <a href="#/product/{{$index}}" class="btn btn-default">Więcej</a>  
+		        <button ng-click="addToCart(product)" class="btn btn-success pull-right">Dodaj do koszyka</button>	
+
 	    	</div>
 	    </div>
 	</div>

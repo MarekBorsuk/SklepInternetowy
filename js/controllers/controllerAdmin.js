@@ -2,7 +2,7 @@
 
 var controllerAdmin = angular.module( 'controllerAdmin' , [ 'ngRoute' ] );
 
-controllerAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
+controllerAdmin.controller( 'products' , [ '$scope' , '$http' , 'cartServices', function( $scope , $http, cartServices ){
 	
 	$http.get( 'model/products.json' ).
 	success( function( data ){
@@ -19,6 +19,9 @@ controllerAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope
 
 		//Przesyłanie danych przez api	
 	};
+
+	// cart.show();
+
 
 }]);
 
