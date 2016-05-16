@@ -137,3 +137,37 @@ controllerUser.controller( 'cartCtrl' , [ '$scope', '$http', 'cartServices', fun
 
 }]);
 
+controllerAdmin.controller( 'userOrders' , [ '$scope' , '$http' , function( $scope , $http ){
+	
+	$http.get( 'model/orders.json' ).
+	success( function( data ){
+		$scope.orders = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+}]);
+
+controllerAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http ){
+	$scope.input = {};
+	$scope.submitLogin = function(){
+		$scope.error = {};
+		$scope.error.login = 'Błędne hasło lub email!';
+		console.log($scope.input);
+	};
+
+}]);
+
+controllerAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
+	$scope.input = {};
+	$scope.submitLogin = function(){
+		$scope.error = {};
+		$scope.error.email = 'Podany email jest już wykorzystany';
+		$scope.submit = true;
+		console.log($scope.input);
+	};
+
+}]);
+
+
+

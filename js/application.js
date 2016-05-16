@@ -66,11 +66,21 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		templateUrl : 'view/user/cart.html'
 	});
 
+	$routeProvider.when( '/orders' , {
+		controller: 'userOrders',
+		templateUrl : 'view/user/orders.html'
+	});
+
 
 	//------------login---------------
 	$routeProvider.when( '/login' , {
 		controller: 'login',
-		templateUrl : 'view/admin/login.html'
+		templateUrl : 'view/user/login.html'
+	});
+
+	$routeProvider.when( '/register' , {
+		controller: 'register',
+		templateUrl : 'view/user/register.html'
 	});
 
 	$routeProvider.otherwise({
