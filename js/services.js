@@ -48,4 +48,42 @@ services.factory('cartServices', [ 'store', function(store){
 	};
 
 	return cart;
-}])
+}]);
+
+
+services.service('checkToken', ['store', 'jwtHelper', function(store, jwtHelper){
+	
+	var token = store.get('token');
+	if(token){
+		token = jwtHelper.decodeToken(token);
+	}else{
+		token = false;
+	}	
+
+	this.payload = function(){
+		return token;
+	};
+
+	this.loggedIn = function(){
+		if(token)
+			return true;		
+		else	
+			return false;
+	};
+
+	this.isAdmin = function(){
+		if(token.role == 'admin')
+			return true;
+		else
+			false;
+	};
+
+	this.raw = function(){
+		return token;
+	};
+
+	this.del = function(){
+		store.remove('token');
+	};
+
+}]);

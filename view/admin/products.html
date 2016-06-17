@@ -9,15 +9,14 @@
 	        </div>
         </div>
 		
-	    <div class="alert alert-info" ng-repeat="product in products | filter : search">
-
-	        <span class="text-capitalize">{{product.name}}</span>
-	        <br> 
-	        {{product.price | number:2}} zł
-	        <br>
-	        <br>
-	        <a href="#/product/edit/{{$index}}" class="btn btn-success">Edytuj</a>
-	        <button ng-click="delete(product, $index)" class="btn btn-danger pull-right ">Usuń</button>
+	    <div class="panel panel-default" ng-repeat="product in products | filter : search">
+			<div class="panel-body">
+		        <h3><span class="label label-warning pull-right">{{product.price | number:2}} zł</span></h3> 
+		        <h4><a href="#/admin/product/edit/{{$index}}" class="text-capitalize">{{product.name}}</a></h4>
+		       	<hr>		        
+		        <a href="#/admin/product/edit/{{product.id}}" class="btn btn-success">Edytuj</a>
+		        <button ng-click="delete(product, $index)" class="btn btn-danger pull-right ">Usuń</button>
+	    	</div>
 
 	    </div>
 	</div>

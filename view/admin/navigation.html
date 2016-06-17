@@ -27,9 +27,9 @@
                   </div>
                 </form> -->
               <ul class="nav navbar-nav navbar-right">
-                  <li ng-class="{active : isActive('/admin/orders')}"><a href="#/admin/orders">Zamówienia</span>
+                  <li ng-class="{active : isActive('/admin/orders')}"><a href="#/admin/orders">Zamówienia
                     <!-- Zamówienia --></a></li> 
-                  <li ng-class="{active : isActive('/logout')}"><a href="#/logout"><span class="glyphicon glyphicon-user"></span> Wyloguj</a></li>        
+                  <li ng-class="{active : isActive('/logout')}"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-user"></span> Wyloguj</a></li>        
               </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

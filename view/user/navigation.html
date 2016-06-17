@@ -32,16 +32,18 @@
                   <li ng-class="{active : isActive('/orders')}"><a href="#/orders">
                     Zamówienia</a></li> 
 
-                  <li ng-class="{active : isActive('/login')}" data-toggle="modal" data-target="#myModal"><a href="#/login"><span class="glyphicon glyphicon-user"></span> Zaloguj</a></li>
+                  <li ng-class="{active : isActive('/login')}" data-toggle="modal" data-target="#myModal"><a href="#/login" ng-if="!loggedIn"><span class="glyphicon glyphicon-user"></span> Zaloguj</a></li>
+                  <li ng-class="{active : isActive('/logout')}" data-toggle="modal" data-target="#myModal"><a href="" ng-if="loggedIn" ng-click="logout()"><span class="glyphicon glyphicon-user"></span> Wyloguj</a></li>
 
-                  <li ng-class="{active : isActive('/register')}"><a href="#/register"><span class="glyphicon glyphicon-user"></span> Rejestracja</a></li>
+                  <li ng-class="{active : isActive('/register')}"><a href="#/register" ng-if="!loggedIn"><span class="glyphicon glyphicon-user"></span> Rejestracja</a></li>
 
-                  <li ng-class="{active : isActive('/admin')}"><a href="#/admin/users"><span class="glyphicon glyphicon-user"></span> Admin</a></li>   
+                  <li ng-class="{active : isActive('/admin')}"><a href="#/admin/users" ng-if="isAdmin"><span class="glyphicon glyphicon-user"></span> Admin</a></li>   
                        
                 </ul>
               </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-      </nav>    
+      </nav>  
+      <!-- <div class="alert alert-warning ng-id="noAdmin">Brak dostępu.</div>   -->
     </div>
   </div>
 </div>

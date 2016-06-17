@@ -4,27 +4,35 @@ var controllerUser = angular.module( 'controllerUser' , [ 'ngRoute' ] );
 
 controllerUser.controller( 'userShowProducts' , [ '$scope' , '$http', 'cartServices', function( $scope , $http, cartServices ){
 	
-	$http.get( 'model/products.json' ).
+	$http.get( 'api/user/products/get/' ).
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd API' );
 	});	
 
 	$scope.addToCart = function(product){
 		cartServices.add(product);
+
+		if(cartServices.show().length){
+			angular.forEach(cartServices.show(), function(item){
+				if(item.id == product.id){
+					product.qty = item.qty;
+					console.log(product.qty);
+				}				
+			});
+		}
 	};
 
 }]);
 
 
 controllerUser.controller( 'userShowProduct' , [ '$scope' , '$http' , '$routeParams','cartServices', function( $scope , $http , $routeParams, cartServices ){
+	var id = $routeParams.id;
 
-	$http.post( 'model/products.json', function(){
-		//Łączenie z api	
-	}).success( function( data ){
-		var products = data;
-		$scope.product = products[$routeParams.id];
+	$http.post( 'api/user/products/get/' + id ).
+	success( function( data ){
+		$scope.product = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});	
@@ -33,29 +41,20 @@ controllerUser.controller( 'userShowProduct' , [ '$scope' , '$http' , '$routePar
 		cartServices.add(product);
 	};
 
-}]);
-
-
-
-controllerUser.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
-
-	$http.post( 'model/users.json' ).
-	success( function( data ){
-		var users = data;
-		$scope.user = users[$routeParams.id];
-	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
-	});
-
-	$scope.saveChanges = function ( user ) {
-
-		// TODO: przesłać dane przez API
-
-		console.log( user );
-		console.log( $routeParams.id );
-	};
+	function getImages(){
+		$http.get( 'api/user/images/getImages/' + id)
+		.success( function( data ){
+			$scope.images = data;
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
+	}	
+	getImages();
 
 }]);
+
+
+
 
 controllerUser.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
 	
@@ -148,23 +147,76 @@ controllerAdmin.controller( 'userOrders' , [ '$scope' , '$http' , function( $sco
 
 }]);
 
-controllerAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http ){
-	$scope.input = {};
-	$scope.submitLogin = function(){
-		$scope.error = {};
-		$scope.error.login = 'Błędne hasło lub email!';
-		console.log($scope.input);
+controllerAdmin.controller( 'login' , [ '$scope' , '$http' , 'store', 'checkToken', '$location', function( $scope , $http, store, checkToken, $location ){
+	
+	if(checkToken.loggedIn()){
+		$location.path( "/products");
+	}
+
+	$scope.user = {};
+	$scope.formSubmit = function ( user ) {
+
+		$http.post( 'api/user/users/login/' , {
+			email : user.email,
+			password : user.password
+		}).success( function( data ){
+
+			$scope.submit = true;
+			$scope.error = data.error;
+			
+			if ( !data.error )
+			{
+				store.set( 'token' , data.token );
+				location.reload();
+			}
+			
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+
 	};
+
+	// var token = store.get('token');
+	// token = checkToken.decodeToken(token);
+
+	//console.log(checkToken.payload().name);
+
+	//console.log( store.get( 'token' ) );
 
 }]);
 
 controllerAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
-	$scope.input = {};
-	$scope.submitLogin = function(){
-		$scope.error = {};
-		$scope.error.email = 'Podany email jest już wykorzystany';
-		$scope.submit = true;
-		console.log($scope.input);
+	
+	$scope.user = {};
+
+	$scope.formSubmit = function ( user ) {
+
+		$http.post( 'api/user/users/create/' , {
+			user : user,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).success( function( errors ){
+
+			$scope.submit = true;
+			$scope.user = {};
+			
+			if ( errors )
+			{
+				$scope.errors = errors;
+			}
+			else
+			{
+				$scope.errors = {};
+				$scope.success = true;
+			}
+			
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+
+
 	};
 
 }]);

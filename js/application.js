@@ -7,7 +7,7 @@
 */	
 	
 
-var app = angular.module( 'app' , [ 'ngRoute', 'angular-storage', 'controllerNavigation', 'controllerAdmin', 'controllerUser', 'services' ] );
+var app = angular.module( 'app' , [ 'ngRoute', 'angular-storage', 'controllerNavigation', 'controllerAdmin', 'controllerUser', 'services', 'angular-jwt'] );
 
 app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $httpProvider ) {
 

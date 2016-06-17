@@ -1,10 +1,10 @@
 'use strict';
 
-var controllerAdmin = angular.module( 'controllerAdmin' , [ 'ngRoute' ] );
+var controllerAdmin = angular.module( 'controllerAdmin' ,['angularFileUpload', 'directives' ] );
 
 controllerAdmin.controller( 'products' , [ '$scope' , '$http' , 'cartServices', function( $scope , $http, cartServices ){
 	
-	$http.get( 'model/products.json' ).
+	$http.post( 'api/admin/products/get').
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
@@ -12,13 +12,28 @@ controllerAdmin.controller( 'products' , [ '$scope' , '$http' , 'cartServices', 
 	});
 
 	$scope.delete = function (product, $index) {
+		if(!confirm('Czy napewno chcesz to usunąć?'))
+			return false;
 		//splice usuwanie/dodawanie obiektów, używamy go na zbiorach danych,
 		//1 parametr index	
 		//2/3 parametr ilość następnych do usunięcia/dodania obiektów	
 		$scope.products.splice($index, 1);	
 
 		//Przesyłanie danych przez api	
-	};
+		$http.post( 'api/admin/products/delete/', {
+			product : product
+			}).
+			success( function(){
+				$scope.success = true;
+				$timeout(function(){
+					$scope.success = false;
+					$scope.product = {};
+				}, 3000);
+			}).error( function(){
+				console.log( 'Błąd pobrania pliku json' );
+			});
+		};
+	
 
 	// cart.show();
 
@@ -26,76 +41,197 @@ controllerAdmin.controller( 'products' , [ '$scope' , '$http' , 'cartServices', 
 }]);
 
 
-controllerAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllerAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams', 'FileUploader', '$timeout', function( $scope , $http , $routeParams, FileUploader, $timeout ){
 
-	$http.post( 'model/products.json', function(){
-		//Łączenie z api	
-	}).success( function( data ){
-		var products = data;
-		$scope.product = products[$routeParams.id];
+	var productId = $routeParams.id;
+	$scope.id = productId;
+
+	$http.get( 'api/admin/products/get/' + productId).
+	success( function( data ){
+		$scope.product = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});
 
 	$scope.saveChanges = function ( product) {
 		//Przesyłanie danych przez api
-		console.log( product);
-		console.log($routeParams.id);
+
+		$http.post( 'api/admin/products/update/', {
+			product : product
+		}).
+		success( function(){
+			$scope.success = true;
+			$timeout(function(){
+				$scope.success = false;
+			}, 3000);
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
+
 	};
 
-}]);
 
-controllerAdmin.controller( 'productCreate' , [ '$scope' , '$http', function( $scope , $http){
+	function getImages(){
+		$http.get( 'api/admin/images/get/' + productId)
+		.success( function( data ){
+			$scope.images = data;
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
+	}	
+	getImages();
 
-	$scope.createProduct = function () {
-		//Przesłać daone przez api
-		console.log($scope.product);
-	};
+	var uploader = $scope.uploader = new FileUploader({
+            url: 'api/admin/images/upload/' + productId
+    });
 
-}]);
+	//atomatycznie bez odświeżania strony łądują się obrazki na stronie
+    uploader.onCompleteItem = function(fileItem, response, status, headers) {
+            getImages();
+    };
 
-controllerAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
+    $scope.deleteImage = function(imageName, $index){
+    	$scope.images.splice($index, 1);
+
+    	$http.post( 'api/admin/images/delete/',{
+    		id: productId,
+    		image: imageName
+    	}).success( function(){
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
+    };
 	
-	$http.get( 'model/users.json' ).
+
+}]);
+
+controllerAdmin.controller( 'productCreate' , [ '$scope' , '$http', '$timeout', function( $scope , $http, $timeout){
+
+	$scope.createProduct = function (product) {
+		//Przesłać dane przez api
+
+		$http.post( 'api/admin/products/create/', {
+			product : product
+		}).
+		success( function(){
+			$scope.success = true;
+			$timeout(function(){
+				$scope.success = false;
+				$scope.product = {};
+			}, 3000);
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
+	};
+
+}]);
+
+controllerAdmin.controller( 'users' , [ '$scope' , '$http', '$timeout',  function( $scope , $http, $timeout ){
+	
+	
+	$http.get( 'api/admin/users/get' ).
 	success( function( data ){
 		$scope.users = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});
 
-	$scope.delete = function (user, $index) {		
+	$scope.delete = function (user, $index) {	
+	if(!confirm('Czy napewno chcesz usunąć urzytkownika?'))
+			return false;	
 		$scope.users.splice($index, 1);
-		
-	};
+
+		$http.post( 'api/admin/users/delete/', {
+			user : user
+			}).error( function(){
+				console.log( 'Błąd pobrania pliku json' );
+			});
+		};		
 
 }]);
 
 
-controllerAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllerAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams', '$timeout' , function( $scope , $http , $routeParams, $timeout ){
 
-	$http.post( 'model/users.json' ).
+	var userId = $routeParams.id;
+	$scope.id = userId;
+
+	$http.post( 'api/admin/users/get/' + userId ).
 	success( function( data ){
-		var users = data;
-		$scope.user = users[$routeParams.id];
+		$scope.user = data;
+		console.log( data );
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});
 
 	$scope.saveChanges = function ( user ) {
 
-		// TODO: przesłać dane przez API
+		$http.post( 'api/admin/users/update/' , {
+			user : user,
+			id : userId,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).success( function( errors ){
 
-		console.log( user );
-		console.log( $routeParams.id );
+			$scope.submit = true;
+			
+			if ( errors )
+			{
+				$scope.errors = errors;
+			}
+			else
+			{
+				$scope.success = true;
+				$timeout(function(){
+					$scope.success = false;
+					$scope.product = {};
+				} , 3000 );
+			}
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
+
 
 }]);
 
-controllerAdmin.controller( 'userCreate' , [ '$scope' , '$http', function( $scope , $http){
 
-	$scope.createUser = function () {
-		//Przesłać daone przez api
-		console.log($scope.user);
+
+controllerAdmin.controller( 'userCreate' , [ '$scope' , '$http', '$timeout', function( $scope , $http, $timeout){
+
+	$scope.user = {};
+	$scope.user.role = 'user';
+
+	$scope.createUser = function (user) {
+		//Przesłać dane przez api
+
+		$http.post( 'api/admin/users/create/', {
+			user : user,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).
+		success( function(errors){
+			$scope.submit = true;	
+
+			if(errors){
+				$scope.errors = errors; 
+			}else{
+				$scope.success = true;
+				$timeout(function(){
+				$scope.success = false;
+				$scope.user = {};
+			}, 3000);
+			}	
+					
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
 	};
 
 }]);
